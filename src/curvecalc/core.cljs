@@ -85,7 +85,26 @@
     [:td (trunc (:max this-grade))]
     ]))
 
+
+(defn simple-row-component [grange distros]
+  (let [this-grade (grange distros)]
+    [:tr {:key (random-uuid)}
+     [:td (str (name grange))]
+     [:td (:range this-grade)]
+     [:td (trunc (:norm this-grade))]
+     [:td (trunc (:min this-grade))]
+     [:td (trunc (:max this-grade))]
+     ]))
+
+
 (def order-of-keys [:A+ :A :A- :B+ :B :B- :C+ :C-F])
+
+(defn body-component [num-students]
+  (let [distros (permissible-distributions num-students)
+        rows (for [x order-of-keys] (simple-row-component x distros))]
+    [:tbody rows
+     ]))
+
 
 (defn table-component [num-students]
   [:table
@@ -96,8 +115,9 @@
      [:th "norm"]
      [:th "min"]
      [:th "max"]]]
-   [:tbody
-   [row-component :B num-students]]
+   [body-component num-students]
+;;   [:tbody
+;;   [row-component :B num-students]]
    ])
 
 
