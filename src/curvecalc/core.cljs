@@ -1,7 +1,7 @@
 (ns curvecalc.core
   (:require [reagent.core :refer [atom render]]
-            [cljs.pprint :refer [cl-format]]))
-
+            [cljs.pprint :refer [cl-format]]
+            [curvecalc.upload.core :refer [file-upload-component]]))
 
 (defonce numstuds (atom 0))
 
@@ -90,7 +90,7 @@
   [:div.container [:h3 "Iowa Law Grade Curve Calculator"]
    [:p "Enter the number of students: " [input-field numstuds]]
    [:div [table-component @numstuds]]
-   ])
+   [file-upload-component]])
 
 ;; -------------------------
 ;; Initialize app
