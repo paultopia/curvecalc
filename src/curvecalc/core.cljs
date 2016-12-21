@@ -52,39 +52,8 @@
            :value @val-atom
            :on-change #(reset! val-atom (-> % .-target .-value))}])
 
-
 (defn trunc [somenum]
   (cl-format nil "~,2f" somenum))
-
-
-(defn format-grade [grange num-students]
-  (str (name grange)
-       " ("
-       (:range (grange (permissible-distributions num-students)))
-       ")\n norm: "
-       (trunc (:norm (grange (permissible-distributions num-students))))
-       "\n min: "
-       (trunc (:min (grange (permissible-distributions num-students))))
-       "\n max: "
-       (trunc (:max (grange (permissible-distributions num-students))))
-       "\n"
-       ))
-
-(defn one-range-component [num-students]
-  [:tr
-   [:td (format-grade :A num-students)]]
-  )
-
-(defn row-component [grange num-students]
-  (let [this-grade (grange (permissible-distributions num-students))]
-   [:tr
-    [:td (str (name grange))]
-    [:td (:range this-grade)]
-    [:td (trunc (:norm this-grade))]
-    [:td (trunc (:min this-grade))]
-    [:td (trunc (:max this-grade))]
-    ]))
-
 
 (defn simple-row-component [grange distros]
   (let [this-grade (grange distros)]
@@ -93,18 +62,14 @@
      [:td (:range this-grade)]
      [:td (trunc (:norm this-grade))]
      [:td (trunc (:min this-grade))]
-     [:td (trunc (:max this-grade))]
-     ]))
-
+     [:td (trunc (:max this-grade))]]))
 
 (def order-of-keys [:A+ :A :A- :B+ :B :B- :C+ :C-F])
 
 (defn body-component [num-students]
   (let [distros (permissible-distributions num-students)
         rows (for [x order-of-keys] (simple-row-component x distros))]
-    [:tbody rows
-     ]))
-
+    [:tbody rows]))
 
 (defn table-component [num-students]
   [:table
@@ -115,21 +80,16 @@
      [:th "norm"]
      [:th "min"]
      [:th "max"]]]
-   [body-component num-students]
-;;   [:tbody
-;;   [row-component :B num-students]]
-   ])
-
+   [body-component num-students]])
 
 
 ;; -------------------------
 ;; Views
 
 (defn home-page []
-  [:div [:h2 "Iowa Law Grade Curve Calculator"]
-   [:p "num studs: " @numstuds :foo]
-   [:div "test: " [table-component @numstuds]]
+  [:div [:h3 "Iowa Law Grade Curve Calculator"]
    [:p "Enter the number of students: " [input-field numstuds]]
+   [:div [table-component @numstuds]]
    ])
 
 ;; -------------------------
