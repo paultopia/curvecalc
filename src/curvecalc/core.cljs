@@ -71,15 +71,32 @@
        ))
 
 (defn one-range-component [num-students]
-  [:p (format-grade :A num-students)]
+  [:tr
+   [:td (format-grade :A num-students)]]
   )
+
+(defn row-component [grange num-students]
+  (let [distros (permissible-distributions num-students)]
+   [:tr
+    [:td (str (name grange))]
+    [:td (trunc (:norm (grange distros)))]]))
+
+(defn table-component [num-students]
+  [:table
+   [:tbody
+    [one-range-component num-students]
+   [row-component :B num-students]]
+   ])
+
+
+
 ;; -------------------------
 ;; Views
 
 (defn home-page []
   [:div [:h2 "Iowa Law Grade Curve Calculator"]
    [:p "num studs: " @numstuds :foo]
-   [:div "test: " [one-range-component @numstuds]]
+   [:div "test: " [table-component @numstuds]]
    [:p "Enter the number of students: " [input-field numstuds]]
    ])
 
