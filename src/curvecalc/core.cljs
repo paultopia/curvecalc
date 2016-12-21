@@ -76,15 +76,27 @@
   )
 
 (defn row-component [grange num-students]
-  (let [distros (permissible-distributions num-students)]
+  (let [this-grade (grange (permissible-distributions num-students))]
    [:tr
     [:td (str (name grange))]
-    [:td (trunc (:norm (grange distros)))]]))
+    [:td (:range this-grade)]
+    [:td (trunc (:norm this-grade))]
+    [:td (trunc (:min this-grade))]
+    [:td (trunc (:max this-grade))]
+    ]))
+
+(def order-of-keys [:A+ :A :A- :B+ :B :B- :C+ :C-F])
 
 (defn table-component [num-students]
   [:table
+   [:thead
+    [:tr
+     [:th "grade"]
+     [:th "range"]
+     [:th "norm"]
+     [:th "min"]
+     [:th "max"]]]
    [:tbody
-    [one-range-component num-students]
    [row-component :B num-students]]
    ])
 
