@@ -45,7 +45,7 @@
          :min 0
          :norm (* .025 num-students)
          :max (* .05 num-students)
-         :range "=<2.3"}})
+         :range "2.3 or below"}})
 
 (defn input-field [val-atom]
   [:input {:type "text"
@@ -72,14 +72,14 @@
     [:tbody rows]))
 
 (defn table-component [num-students]
-  [:table
+  [:table.u-full-width
    [:thead
     [:tr
-     [:th "grade"]
-     [:th "range"]
-     [:th "norm"]
-     [:th "min"]
-     [:th "max"]]]
+     [:th "Grade"]
+     [:th "Score Range"]
+     [:th "Norm"]
+     [:th "Min"]
+     [:th "Max"]]]
    [body-component num-students]])
 
 
@@ -87,7 +87,7 @@
 ;; Views
 
 (defn home-page []
-  [:div [:h3 "Iowa Law Grade Curve Calculator"]
+  [:div.container [:h3 "Iowa Law Grade Curve Calculator"]
    [:p "Enter the number of students: " [input-field numstuds]]
    [:div [table-component @numstuds]]
    ])
