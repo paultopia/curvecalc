@@ -29,19 +29,13 @@
 
 (defn simple-row-component [grange distros distro-key]
   (let [this-grade (grange distros)]
-    (if (= distro-key :complex)
       [:tr {:key (random-uuid)}
        [:td (str (name grange))]
        [:td (:range this-grade)]
-       [:td (trunc (:norm this-grade))]
+       (if (= distro-key :complex) [:td (trunc (:norm this-grade))] nil)
        [:td (trunc (:min this-grade))]
        [:td (trunc (:max this-grade))]]
-      [:tr {:key (random-uuid)}
-       [:td (str (name grange))]
-       [:td (:range this-grade)]
-       [:td (trunc (:min this-grade))]
-       [:td (trunc (:max this-grade))]]
-      )))
+      ))
 
 (defn order-of-keys [distro-key]
   (if (= distro-key :complex)
@@ -65,6 +59,12 @@
    [body-component num-students distro-key]])
 
 
+(defn explainer-component [distro-key]
+  (if (= distro-key :complex)
+    [:p "This table displays the curve that applies to classes of 30 students or more, per Student Handbook III.B.2. If you want to display the curve that applies to classes under 30 students (Handbook III.B.3), even though it is very weird (and technically seems to prohibit grades of 3.6), click the button below."]
+    [:p "This table displays the curve that applies to classes under 30 students, per Student Handbook III.B.3. If you want to display the curve that applies to classes of 30 students or greater (Handbook III.B.2), click the button below."]
+    ))
+
 ;; -------------------------
 ;; Views
 
@@ -72,12 +72,14 @@
   [:div.container [:h3 "Iowa Law Grade Curve Calculator"]
    [:p "Enter the number of students: " [input-field numstuds]]
    [:div [table-component @numstuds @distribution]]
-   [:p "Note: this table automatically displays the curve that applies to classes of 30 students or more, per Student Handbook III.B.2."]
-   [:p "There is an alternative simpler curve for class sizes under 30 students, per Student Handbook III.B.3.  I'm pretty suspicious of this curve (for one thing, it appears to technically forbid a grade of 3.6), but if you want to see it, select it below."]
-   [:p [:button {:on-click #(swap! distribution distroset @distribution)} "Swap distributions."] (str @distribution)]
+[explainer-component @distribution]
+   [:p [:button {:on-click #(swap! distribution distroset @distribution)} "Swap distributions."] ]
    [:hr]
    [:h4 "Experimental Stuff"]
-   [file-upload-component]])
+   [file-upload-component]
+   [:hr]
+   [:p "In case you're really curious, you can see "
+    [:a {:href "https://github.com/paultopia/curvecalc"} "the source code for this stuff."]]])
 
 ;; -------------------------
 ;; Initialize app

@@ -53,7 +53,7 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
 ;; ONLY PUBLIC NAME
 (defn file-upload-component []
   [:div
-   [:p "Experimental functionality to upload and validate files.  Right now, you can select a csv file (excel will export a worksheet as csv) with the grades in the " [:b "second column"] " (mandatory) and the program will tell you what the median grade is. Down the road (time and laziness permitting), it may also validate your grades against the curve and maybe even suggest corrections. Maybe."]
+   [:p "Experimental functionality to upload and validate files.  Right now, you can select a csv file (Excel will export a worksheet as csv) with the grades in the " [:b "second column"] " (mandatory) and the program will tell you what the median grade is. Down the road (time and laziness permitting), it may also validate your grades against the curve and maybe even suggest corrections. Maybe."]
    [:p "Supply your file below. Note that this file doesn't actually send it to any server---it just analyzes the file within your browser, so student privacy is preserved."]
    [input-component]
   ;; [:p (str @file-data)]
