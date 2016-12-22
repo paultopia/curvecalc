@@ -9,7 +9,8 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
   The only thing this namespace should expose to the rest of the app is file-upload-component, which will be a full renderable reagent page that will handle upload and download.  (This page will also need to go back to previous page using dirty circular namespace dependency tricks.) (Alternatively, I may offer it as a component that renders below the table...)"
   (:require [reagent.core :refer [render atom]]
             [cljs.core.async :refer [put! chan <! >!]]
-            [goog.labs.format.csv :refer [parse]])
+            [goog.labs.format.csv :refer [parse]]
+            [curvecalc.upload.validate :refer [process-gradelist]])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 (def file-data (atom " "))
@@ -18,7 +19,7 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
   (map (fn [e]
          (let [target (.-currentTarget e)
                file (-> target .-files (aget 0))]
-           (set! (.-value target) "")
+        ;;   (set! (.-value target) "")
            file))))
 
 (defn transpose [m]
@@ -45,13 +46,14 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
   (recur))
 
 (defn input-component []
-  [:input {:type "file" :id "file" :accept ".csv" :name "file" :on-change put-upload}])
+  [:input {:type "file" :id "file" :title "upload" :accept ".csv" :name "file" :on-change put-upload}])
 
 ;;; SECOND COLUMN OF CSV MUST BE GRADES.  (And will need to parse them to floats in processing.)
 
 ;; ONLY PUBLIC NAME
 (defn file-upload-component []
   [:div
-   [:p "Experimental functionality to upload and validate files... coming soon"]
+   [:p "Experimental functionality to upload and validate files.  Right now, you can upload a csv file (excel will export a worksheet as csv) with the grades in the " [:b "second column"] " (mandatory) and the program will tell you what the median grade is. Down the road (time and laziness permitting), it may also validate your grades against the curve and maybe even suggest corrections. Maybe."]
    [input-component]
-   [:p (str @file-data)]])
+  ;; [:p (str @file-data)]
+   [:p (process-gradelist @file-data)]])
