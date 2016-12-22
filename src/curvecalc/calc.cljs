@@ -48,7 +48,7 @@
         :min (* .15 num-students)
         :norm "N/A"
         :max (* .35 num-students)
-        :range "3.7-4.3"}
+        :range "3.6-4.3"}
    :B+ {
        :min (* .2 num-students)
        :norm "N/A"

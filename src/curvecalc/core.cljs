@@ -61,8 +61,8 @@
 
 (defn explainer-component [distro-key]
   (if (= distro-key :complex)
-    [:p "This table displays the curve that applies to classes of 30 students or more, per Student Handbook III.B.2. If you want to display the curve that applies to classes under 30 students (Handbook III.B.3), even though it is very weird (and technically seems to prohibit grades of 3.6), click the button below."]
-    [:p "This table displays the curve that applies to classes under 30 students, per Student Handbook III.B.3. If you want to display the curve that applies to classes of 30 students or greater (Handbook III.B.2), click the button below."]
+    [:p "This table displays the curve that applies to classes of 30 students or more, per Student Handbook II.B.2. If you want to display the curve that applies to classes under 30 students (Handbook II.B.3), click the button below."]
+    [:p "This table displays the curve that applies to classes under 30 students, per Student Handbook II.B.3. If you want to display the curve that applies to classes of 30 students or greater (Handbook II.B.2), click the button below."]
     ))
 
 ;; -------------------------
@@ -79,7 +79,7 @@
    [file-upload-component]
    [:hr]
    [:p "In case you're really curious, you can see "
-    [:a {:href "https://github.com/paultopia/curvecalc"} "the source code for this stuff."]]])
+    [:a {:href "https://github.com/paultopia/curvecalc"} "the source code for this stuff."] " Source for requirements: " [:a {:href "https://law.uiowa.edu/sites/law.uiowa.edu/files/wysiwyg_uploads/student_handbook-16-17.pdf"} "2016-7 Student handbook."]]])
 
 ;; -------------------------
 ;; Initialize app
