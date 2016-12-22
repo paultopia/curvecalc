@@ -7,57 +7,17 @@
 (defonce numstuds (atom 0))
 (defonce distribution (atom :complex))
 
-(defn distroset [distro]
-  (if (= distro :complex)
+(defn distroset [distro-key]
+  (if (= distro-key :complex)
     :simple
     :complex))
 
-(defn permissible-distributions [num-students distro]
-  (if (= distro :complex)
+(defn permissible-distributions [num-students distro-key]
+  (if (= distro-key :complex)
     (complex-distributions num-students)
     (simple-distributions num-students)))
 
-(defn old-permissible-distributions [num-students]
-  {:A+ {
-        :min 0
-        :norm (* .025 num-students)
-        :max (* .05 num-students)
-        :range "4.2-4.3"}
-   :A {
-       :min (* .05 num-students)
-       :norm (* .075 num-students)
-       :max (* .1 num-students)
-       :range "3.9-4.1"}
-   :A- {
-        :min (* .1 num-students)
-        :norm (* .15 num-students)
-        :max (* .2 num-students)
-        :range "3.6-3.8"}
-   :B+ {
-        :min (* .2 num-students)
-        :norm (* .25 num-students)
-        :max (* .3 num-students)
-        :range "3.3-3.5"}
-   :B {
-        :min (* .2 num-students)
-        :norm (* .25 num-students)
-       :max (* .3 num-students)
-       :range "3.0-3.2"}
-   :B- {
-        :min (* .1 num-students)
-        :norm (* .15 num-students)
-        :max (* .2 num-students)
-        :range "2.7-2.9"}
-   :C+ {
-        :min (* .05 num-students)
-        :norm (* .075 num-students)
-        :max (* .1 num-students)
-        :range "2.4-2.6"}
-   :C-F {
-         :min 0
-         :norm (* .025 num-students)
-         :max (* .05 num-students)
-         :range "2.3 or below"}})
+;; all this distro-key manipulation is ugly and I hate it. need to refactor.
 
 (defn input-field [val-atom]
   [:input {:type "text"
@@ -67,35 +27,42 @@
 (defn trunc [somenum]
   (cl-format nil "~,2f" somenum))
 
-(defn simple-row-component [grange distros]
+(defn simple-row-component [grange distros distro-key]
   (let [this-grade (grange distros)]
-    [:tr {:key (random-uuid)}
-     [:td (str (name grange))]
-     [:td (:range this-grade)]
-     [:td (trunc (:norm this-grade))]
-     [:td (trunc (:min this-grade))]
-     [:td (trunc (:max this-grade))]]))
+    (if (= distro-key :complex)
+      [:tr {:key (random-uuid)}
+       [:td (str (name grange))]
+       [:td (:range this-grade)]
+       [:td (trunc (:norm this-grade))]
+       [:td (trunc (:min this-grade))]
+       [:td (trunc (:max this-grade))]]
+      [:tr {:key (random-uuid)}
+       [:td (str (name grange))]
+       [:td (:range this-grade)]
+       [:td (trunc (:min this-grade))]
+       [:td (trunc (:max this-grade))]]
+      )))
 
-(defn order-of-keys [distro]
-  (if (= distro :complex)
+(defn order-of-keys [distro-key]
+  (if (= distro-key :complex)
     [:A+ :A :A- :B+ :B :B- :C+ :C-F]
     [:A+_to_A- :B+ :B :B-_to_F]))
 
-(defn body-component [num-students distro]
-  (let [distros (permissible-distributions num-students distro)
-        rows (for [x (order-of-keys distro)] (simple-row-component x distros))]
+(defn body-component [num-students distro-key]
+  (let [distros (permissible-distributions num-students distro-key)
+        rows (for [x (order-of-keys distro-key)] (simple-row-component x distros distro-key))]
     [:tbody rows]))
 
-(defn table-component [num-students distro]
+(defn table-component [num-students distro-key]
   [:table.u-full-width
    [:thead
     [:tr
      [:th "Grade"]
      [:th "Score Range"]
-     [:th "Norm"]
+     (if (= distro-key :complex ) [:th "Norm"] nil)
      [:th "Min"]
      [:th "Max"]]]
-   [body-component num-students distro]])
+   [body-component num-students distro-key]])
 
 
 ;; -------------------------
