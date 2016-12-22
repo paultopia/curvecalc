@@ -12,7 +12,12 @@
     :simple
     :complex))
 
-(defn permissible-distributions [num-students]
+(defn permissible-distributions [num-students distro]
+  (if (= distro :complex)
+    (complex-distributions num-students)
+    (simple-distributions num-students)))
+
+(defn old-permissible-distributions [num-students]
   {:A+ {
         :min 0
         :norm (* .025 num-students)
@@ -71,14 +76,17 @@
      [:td (trunc (:min this-grade))]
      [:td (trunc (:max this-grade))]]))
 
-(def order-of-keys [:A+ :A :A- :B+ :B :B- :C+ :C-F])
+(defn order-of-keys [distro]
+  (if (= distro :complex)
+    [:A+ :A :A- :B+ :B :B- :C+ :C-F]
+    [:A+_to_A- :B+ :B :B-_to_F]))
 
-(defn body-component [num-students]
-  (let [distros (permissible-distributions num-students)
-        rows (for [x order-of-keys] (simple-row-component x distros))]
+(defn body-component [num-students distro]
+  (let [distros (permissible-distributions num-students distro)
+        rows (for [x (order-of-keys distro)] (simple-row-component x distros))]
     [:tbody rows]))
 
-(defn table-component [num-students]
+(defn table-component [num-students distro]
   [:table.u-full-width
    [:thead
     [:tr
@@ -87,7 +95,7 @@
      [:th "Norm"]
      [:th "Min"]
      [:th "Max"]]]
-   [body-component num-students]])
+   [body-component num-students distro]])
 
 
 ;; -------------------------
@@ -96,7 +104,7 @@
 (defn home-page []
   [:div.container [:h3 "Iowa Law Grade Curve Calculator"]
    [:p "Enter the number of students: " [input-field numstuds]]
-   [:div [table-component @numstuds]]
+   [:div [table-component @numstuds @distribution]]
    [:p "Note: this table automatically displays the curve that applies to classes of 30 students or more, per Student Handbook III.B.2."]
    [:p "There is an alternative simpler curve for class sizes under 30 students, per Student Handbook III.B.3.  I'm pretty suspicious of this curve (for one thing, it appears to technically forbid a grade of 3.6), but if you want to see it, select it below."]
    [:p [:button {:on-click #(swap! distribution distroset @distribution)} "Swap distributions."] (str @distribution)]
