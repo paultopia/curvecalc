@@ -52,8 +52,18 @@
 ;;     (>= max number min) of (:range :key distro). Or just report the difference
 ;; 4.  Take generated vector and report.
 
+(defn combine-buckets [numgrades buckets]
+  (if (>= numgrades 30)
+    buckets
+    {:A+_to_A- (+ (:A+ buckets) (:A buckets) (:A- buckets))
+     :B+ (:B+ buckets)
+     :B (:B buckets)
+     :B-_to_F (+ (:B- buckets) (:C+ buckets) (:C-F buckets))
+     }))
+
+
 (defn report-buckets [column]
-  (str (bucketizer column)))
+  (str (combine-buckets 30 (bucketizer column))))
 
 ;; process
 
