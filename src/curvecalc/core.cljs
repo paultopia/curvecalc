@@ -11,18 +11,26 @@
            :value @val-atom
            :on-change #(reset! val-atom (-> % .-target .-value))}])
 
-(defn trunc [somenum]
+(defn dig2 [somenum]
   (cl-format nil "~,2f" somenum))
 
-(defn simple-row-component [grange distros distro-key]
+(defn dig1 [somenum]
+  (cl-format nil "~,1f" somenum))
+
+(defn range-stringer [grade]
+  (let [r (:range grade)
+        l (dig1 (:low r))
+        h (dig1 (:high r))]
+    (str l " - " h)))
+
+(defn row-component [grange distros distro-key]
   (let [this-grade (grange distros)]
       [:tr {:key (random-uuid)}
        [:td (str (name grange))]
-       [:td (:range this-grade)]
-       (if (= distro-key :complex) [:td (trunc (:norm this-grade))] nil)
-       [:td (trunc (:min this-grade))]
-       [:td (trunc (:max this-grade))]]
-      ))
+       [:td (range-stringer this-grade)]
+       (if (= distro-key :complex) [:td (dig2 (:norm this-grade))] nil)
+       [:td (dig2 (:min this-grade))]
+       [:td (dig2 (:max this-grade))]]))
 
 (defn order-of-keys [distro-key]
   (if (= distro-key :complex)
@@ -31,7 +39,7 @@
 
 (defn body-component [num-students distro-key]
   (let [distros (permissible-distributions num-students distro-key)
-        rows (for [x (order-of-keys distro-key)] (simple-row-component x distros distro-key))]
+        rows (for [x (order-of-keys distro-key)] (row-component x distros distro-key))]
     [:tbody rows]))
 
 (defn table-component [num-students distro-key]
