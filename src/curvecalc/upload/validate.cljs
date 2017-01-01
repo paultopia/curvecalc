@@ -45,13 +45,6 @@
 (defn bucketizer [column]
     (frequencies (mapv find-bucket column)))
 
-;; now I have a map of grades to counts.  this is great.  Next steps:
-;; 1.  Figure out if we're in >=30 or <30, and combine map elements if latter
-;; 2.  Generate distro based on number of grades.
-;; 3.  Map over the order-of-keys vector and, for each key, test if number is
-;;     (>= max number min) of (:range :key distro). Or just report the difference
-;; 4.  Take generated vector and report.
-
 (defn combine-buckets [numgrades buckets]
   (if (>= numgrades 30)
     buckets
@@ -89,7 +82,10 @@
         validator (partial validate-one-grade distro buckets)]
     (apply merge (map #(validator %) keyorder))))
 
+;; micro-test.  need a test suite here.
 (.log js/console (str (validate-grades [3.1 3.4 3.3 3.0 4.3 2.9 4.1 2.3 2.1 3.0 1.0 4.0 3.8])))
+
+;; all I need to do now is report (and make tests...prob using devcards.)
 
 (defn report-buckets [column]
   (str (combine-buckets 30 (bucketizer column))))
