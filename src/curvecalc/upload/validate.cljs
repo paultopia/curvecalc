@@ -66,10 +66,18 @@
     :complex
     :simple))
 
-(defn validate-one-grade [grade-key distro buckets]
+(defn validate-one-grade [distro buckets grade-key]
   (let [subdistro (grade-key distro)
-        subbucket (grade-key buckets)]
-    :foo))
+        numingrade (grade-key buckets)
+        minimum (:min subdistro)
+        maximum (:max subdistro)]
+    (cond
+      (>= maximum numingrade minimum)
+      {grade-key {:evaluation :valid :info nil}}
+      (> numingrade maximum)
+      {grade-key {:evaluation :invalid :info {:fault :high :max maximum :numingrade numingrade}}}
+      :else
+      {grade-key {:evaluation :invalid :info {:fault :low :min minimum :numingrade numingrade}}})))
 
 ;; names are inconsistent here --- numgrades in this ns, num-students elsewhere. fix this.
 (defn validate-grades [column]
@@ -77,8 +85,11 @@
         distro-key (choose-distro numgrades)
         distro (c/permissible-distributions numgrades distro-key)
         keyorder (c/order-of-keys distro-key)
-        buckets (combine-buckets numgrades (bucketizer column))]
-    :foo))
+        buckets (combine-buckets numgrades (bucketizer column))
+        validator (partial validate-one-grade distro buckets)]
+    (apply merge (map #(validator %) keyorder))))
+
+(.log js/console (str (validate-grades [3.1 3.4 3.3 3.0 4.3 2.9 4.1 2.3 2.1 3.0 1.0 4.0 3.8])))
 
 (defn report-buckets [column]
   (str (combine-buckets 30 (bucketizer column))))
