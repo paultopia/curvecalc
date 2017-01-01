@@ -61,6 +61,24 @@
      :B-_to_F (+ (:B- buckets) (:C+ buckets) (:C-F buckets))
      }))
 
+(defn choose-distro [numgrades]
+  (if (>= numgrades 30)
+    :complex
+    :simple))
+
+(defn validate-one-grade [grade-key distro buckets]
+  (let [subdistro (grade-key distro)
+        subbucket (grade-key buckets)]
+    :foo))
+
+;; names are inconsistent here --- numgrades in this ns, num-students elsewhere. fix this.
+(defn validate-grades [column]
+  (let [numgrades (count column) ; MUST BE done AFTER stripping non-grade entries, like header
+        distro-key (choose-distro numgrades)
+        distro (c/permissible-distributions numgrades distro-key)
+        keyorder (c/order-of-keys distro-key)
+        buckets (combine-buckets numgrades (bucketizer column))]
+    :foo))
 
 (defn report-buckets [column]
   (str (combine-buckets 30 (bucketizer column))))
