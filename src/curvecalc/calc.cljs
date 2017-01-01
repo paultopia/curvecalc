@@ -75,3 +75,8 @@
   (if (= distro-key :complex)
     (complex-distributions num-students)
     (simple-distributions num-students)))
+
+(defn order-of-keys [distro-key]
+  (if (= distro-key :complex)
+    [:A+ :A :A- :B+ :B :B- :C+ :C-F]
+    [:A+_to_A- :B+ :B :B-_to_F]))

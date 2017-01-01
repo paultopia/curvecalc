@@ -1,7 +1,12 @@
-(ns curvecalc.upload.validate)
+(ns curvecalc.upload.validate
+  (:require [curvecalc.calc :as c]))
+
+
 
 (defn sorted-gradelist [column]
   (into [] (sort (map #(js/parseFloat %) (remove #(js/isNaN (js/parseFloat %)) column)))))
+
+;; finding medians
 
 (defn find-median
 "sorted numeric list -> string. undefined for length below 2. needs testing for 2, 3."
@@ -22,5 +27,30 @@
       :else nil)))
 
 
+;; test against max and min
+
+(defn find-bucket [grade]
+  (cond
+    (>= 4.3 grade 4.2) :A+
+    (>= 4.1 grade 3.9) :A
+    (>= 3.8 grade 3.6) :A-
+    (>= 3.5 grade 3.3) :B+
+    (>= 3.2 grade 3.0) :B
+    (>= 2.9 grade 2.7) :B-
+    (>= 2.6 grade 2.4) :C+
+    (>= 2.3 grade) :C-F))
+;; I need to figure out how to construct this from distros.  lots of ugly repetition here.
+;; also has no error-handling for out-of-range grades.
+
+(defn bucketizer [column]
+    (frequencies (mapv find-bucket column)))
+
+(defn report-buckets [column]
+  (str (bucketizer column)))
+
+;; process
+
 (defn process-gradelist [column]
-  (-> column sorted-gradelist report-median))
+  (do
+    (.log js/console (report-buckets column))
+    (-> column sorted-gradelist report-median)))

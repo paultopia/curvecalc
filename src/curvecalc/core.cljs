@@ -3,7 +3,7 @@
             [curvecalc.state :refer [numstuds distribution]]
             [cljs.pprint :refer [cl-format]]
             [curvecalc.upload.core :refer [file-upload-component]]
-            [curvecalc.calc :refer [simple-distributions complex-distributions distroset permissible-distributions]]))
+            [curvecalc.calc :refer [order-of-keys simple-distributions complex-distributions distroset permissible-distributions]]))
 
 
 (defn input-field [val-atom]
@@ -31,11 +31,6 @@
        (if (= distro-key :complex) [:td (dig2 (:norm this-grade))] nil)
        [:td (dig2 (:min this-grade))]
        [:td (dig2 (:max this-grade))]]))
-
-(defn order-of-keys [distro-key]
-  (if (= distro-key :complex)
-    [:A+ :A :A- :B+ :B :B- :C+ :C-F]
-    [:A+_to_A- :B+ :B :B-_to_F]))
 
 (defn body-component [num-students distro-key]
   (let [distros (permissible-distributions num-students distro-key)
