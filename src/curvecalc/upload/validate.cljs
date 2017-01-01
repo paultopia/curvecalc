@@ -2,7 +2,10 @@
   (:require [curvecalc.calc :as c]
             [curvecalc.stringstuff :refer [range-stringer dig1]]))
 
-
+(defn choose-distro [numgrades]
+  (if (>= numgrades 30)
+    :complex
+    :simple))
 
 (defn sorted-gradelist [column]
   (into [] (sort (map #(js/parseFloat %) (remove #(js/isNaN (js/parseFloat %)) column)))))
@@ -19,23 +22,25 @@
         [(nth sgl (- (/ c 2) 1)) (nth sgl (/ c 2))]
         [(nth sgl (quot c 2))]))))
 
-(defn complex-median-valid? [median c]
-  (cond
-    (= c 1) (>= 3.4 (first median) 3.2)
-    (= c 2) (>= 3.4 (first median) (second median) 3.2)))
+;; I should really be using multimethods for this sort of nonsense.
+(defn median-valid? [median c distro-key]
+  (if (= distro-key :simple)
+    (cond
+      (= c 1) (>= 3.4 (first median) 3.2)
+      (= c 2) (>= 3.4 (first median) (second median) 3.2))
+    (cond
+      (= c 1) (= (first median) 3.3)
+      (= c 2) (and
+               (>= (first median) 3.2)
+               (>= 3.4 (second median))))))
 
-(defn simple-median-valid? [median c]
-  (cond
-    (= c 1) (= (first median) 3.3)
-    (= c 2) (and
-             (>= (first median) 3.2)
-             (>= 3.4 (second median)))))
-;; BOTH UNTESTED.
 ;; Complex assumes a valid range is one that contains 3.3, i.e., it's ok to have 3.2-3.4, 3.3-3.4, 3.2-3.3 or 3.3-3.3
 
 (defn report-median [sgl]
   (let [median (find-median sgl)
-        c (count median)]
+        c (count median)
+        distro-key (choose-distro (count sgl))]
+    (.log js/console (str "Median valid? " (median-valid? median c distro-key)))
     (cond
       (= c 1) (str "Median: " (first median))
       (= c 2) (str "Median: " (first median) "-" (second median))
@@ -69,10 +74,6 @@
      :B-_to_F (+ (:B- buckets) (:C+ buckets) (:C-F buckets))
      }))
 
-(defn choose-distro [numgrades]
-  (if (>= numgrades 30)
-    :complex
-    :simple))
 
 (defn validate-one-grade [distro buckets grade-key]
   (let [subdistro (grade-key distro)
@@ -104,7 +105,7 @@
 
 (defn buckets-valid? [keyorder validation]
   (let [bools (mapv #(:evaluation (% validation)) keyorder)]
-    (every? identity bools)))
+    (every? #(= % :valid) bools)))
 
 (defn report-builder [validation grade-key]
   (let [subscore (grade-key validation)
@@ -121,7 +122,7 @@
         keyorder (c/order-of-keys distro-key)
         validation (validate-grades sgl numgrades distro-key keyorder)
         reporter (partial report-builder validation)]
-    (.log js/console (buckets-valid? keyorder validation))
+    (.log js/console (str "Buckets valid? " (buckets-valid? keyorder validation)))
     (mapv reporter keyorder)))
 
 (defn print-validation [sgl]
@@ -133,13 +134,6 @@
 
 (defn report-buckets [column]
   (str (combine-buckets 30 (bucketizer column))))
-
-;; process
-
-;; (defn process-gradelist0 [column]
-;;   (do
-;;     (.log js/console (report-buckets column))
-;;     (-> column sorted-gradelist report-median)))
 
 (defn process-gradelist [column]
   (let [sgl (sorted-gradelist column)]
