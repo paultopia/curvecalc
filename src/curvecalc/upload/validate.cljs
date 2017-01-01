@@ -19,6 +19,20 @@
         [(nth sgl (- (/ c 2) 1)) (nth sgl (/ c 2))]
         [(nth sgl (quot c 2))]))))
 
+(defn complex-median-valid? [median c]
+  (cond
+    (= c 1) (>= 3.4 (first median) 3.2)
+    (= c 2) (>= 3.4 (first median) (second median) 3.2)))
+
+(defn simple-median-valid? [median c]
+  (cond
+    (= c 1) (= (first median) 3.3)
+    (= c 2) (and
+             (>= (first median) 3.2)
+             (>= 3.4 (second median)))))
+;; BOTH UNTESTED.
+;; Complex assumes a valid range is one that contains 3.3, i.e., it's ok to have 3.2-3.4, 3.3-3.4, 3.2-3.3 or 3.3-3.3
+
 (defn report-median [sgl]
   (let [median (find-median sgl)
         c (count median)]
@@ -88,6 +102,9 @@
 ;; all I need to do now is integrate report in ui (and make tests...prob using devcards.)
 ;; oh, also and sort out rounding of non-ints with an option for people to choose.
 
+(defn buckets-valid? [keyorder validation]
+  (let [bools (mapv #(:evaluation (% validation)) keyorder)]
+    (every? identity bools)))
 
 (defn report-builder [validation grade-key]
   (let [subscore (grade-key validation)
@@ -104,6 +121,7 @@
         keyorder (c/order-of-keys distro-key)
         validation (validate-grades sgl numgrades distro-key keyorder)
         reporter (partial report-builder validation)]
+    (.log js/console (buckets-valid? keyorder validation))
     (mapv reporter keyorder)))
 
 (defn print-validation [sgl]
