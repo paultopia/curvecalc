@@ -45,6 +45,13 @@
 (defn bucketizer [column]
     (frequencies (mapv find-bucket column)))
 
+;; now I have a map of grades to counts.  this is great.  Next steps:
+;; 1.  Figure out if we're in >=30 or <30, and combine map elements if latter
+;; 2.  Generate distro based on number of grades.
+;; 3.  Map over the order-of-keys vector and, for each key, test if number is
+;;     (>= max number min) of (:range :key distro). Or just report the difference
+;; 4.  Take generated vector and report.
+
 (defn report-buckets [column]
   (str (bucketizer column)))
 
