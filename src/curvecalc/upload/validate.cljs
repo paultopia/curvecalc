@@ -13,7 +13,7 @@
 ;; finding medians
 
 (defn find-median
-"sorted numeric list -> string. undefined for length below 2. needs testing for 2, 3."
+"sorted numeric list -> vector of length 1 or 2 w median(s). nil for length below 2. needs testing for 2, 3."
   [sgl]
   (let [c (count sgl)]
     (if (< c 2)
@@ -36,15 +36,21 @@
 
 ;; Complex assumes a valid range is one that contains 3.3, i.e., it's ok to have 3.2-3.4, 3.3-3.4, 3.2-3.3 or 3.3-3.3
 
-(defn report-median [sgl]
+(defn report-median
+"in: grade list, sorted, non-grades stripped.
+  out: string that reports whether the median is compliant or not. "
+  [sgl]
   (let [median (find-median sgl)
         c (count median)
-        distro-key (choose-distro (count sgl))]
-    (.log js/console (str "Median valid? " (median-valid? median c distro-key)))
-    (cond
-      (= c 1) (str "Median: " (first median))
-      (= c 2) (str "Median: " (first median) "-" (second median))
-      :else nil)))
+        distro-key (choose-distro (count sgl))
+        isvalid (median-valid? median c distro-key)]
+    (.log js/console (str "Median valid? " isvalid))
+    {:valid isvalid
+     :details
+     (cond
+       (= c 1) (str "Median: " (first median))
+       (= c 2) (str "Median: " (first median) "-" (second median))
+       :else nil)}))
 
 
 ;; test against max and min
