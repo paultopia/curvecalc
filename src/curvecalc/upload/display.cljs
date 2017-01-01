@@ -11,7 +11,10 @@
     ))
 
 (defn buckets-component [sgl]
-  [:p "bar"])
+  (let [{:keys [valid details]} (v/report-validation sgl)]
+    [:div
+     [:p (str (if valid "Grade distribution in buckets is compliant. Details: " "Grade distribution in buckets is NOT compliant. Details: "))]
+     ]))
 
 (defn validation-component [raw-column]
   (let [sgl (v/sorted-gradelist raw-column)]

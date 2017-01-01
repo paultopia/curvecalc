@@ -58,4 +58,5 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
    [:p "Supply your file below. Note that this file doesn't actually send it to any server---it just analyzes the file within your browser, so student privacy is preserved."]
    [input-component]
    [:p (process-gradelist @file-data)]
-   [d/validation-component @file-data]])
+   [d/validation-component @file-data]
+   [d/buckets-component @file-data]])

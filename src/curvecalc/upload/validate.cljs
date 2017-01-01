@@ -118,8 +118,8 @@
         {:keys [label evaluation fault maximum minimum numingrade]} subscore]
     (cond
       (= evaluation :valid)
-      (str label ": Valid! Max: " maximum " Min: " minimum " Number: " numingrade)
-      :else (str label ": INVALID! :-( Max: " maximum " Min: " minimum " Number: " numingrade)
+      [:p (str label ": Valid! Max: " maximum " Min: " minimum " Number: " numingrade)]
+      :else [:p (str label ": INVALID! :-( Max: " maximum " Min: " minimum " Number: " numingrade)]
       )))
 
 (defn report-validation [sgl]
@@ -127,12 +127,16 @@
         distro-key (choose-distro numgrades)
         keyorder (c/order-of-keys distro-key)
         validation (validate-grades sgl numgrades distro-key keyorder)
-        reporter (partial report-builder validation)]
-    (.log js/console (str "Buckets valid? " (buckets-valid? keyorder validation)))
-    (mapv reporter keyorder)))
+        reporter (partial report-builder validation)
+        isvalid (buckets-valid? keyorder validation)]
+    (.log js/console (str "Buckets valid? " isvalid))
+    {:valid isvalid :details (mapv reporter keyorder)}))
 
 (defn print-validation [sgl]
-  (apply str (interpose "\n" (report-validation sgl))))
+  (apply str (interpose " | | | |" (:details (report-validation sgl)))))
+
+(defn print-validation2 [sgl]
+  (let [report :foo] :bar))
 
 ;; micro-test.  need a test suite here.
 (.log js/console (print-validation [3.1 3.4 3.3 3.0 4.3 2.9 4.1 2.3 2.1 3.0 1.0 4.0 3.8]))
