@@ -1,6 +1,6 @@
 (ns curvecalc.upload.validate
   (:require [curvecalc.calc :as c]
-            [curvecalc.stringstuff :refer [range-stringer]]))
+            [curvecalc.stringstuff :refer [range-stringer dig1]]))
 
 
 
@@ -63,8 +63,8 @@
 (defn validate-one-grade [distro buckets grade-key]
   (let [subdistro (grade-key distro)
         numingrade (grade-key buckets)
-        minimum (:min subdistro)
-        maximum (:max subdistro)
+        minimum (dig1 (:min subdistro))
+        maximum (dig1 (:max subdistro))
         label (str (name grade-key) ": " (range-stringer subdistro))]
     (cond
       (>= maximum numingrade minimum)
@@ -106,8 +106,11 @@
         reporter (partial report-builder validation)]
     (mapv reporter keyorder)))
 
+(defn print-validation [sgl]
+  (apply str (interpose "\n" (report-validation sgl))))
+
 ;; micro-test.  need a test suite here.
-(.log js/console (str (report-validation [3.1 3.4 3.3 3.0 4.3 2.9 4.1 2.3 2.1 3.0 1.0 4.0 3.8])))
+(.log js/console (print-validation [3.1 3.4 3.3 3.0 4.3 2.9 4.1 2.3 2.1 3.0 1.0 4.0 3.8]))
 
 
 (defn report-buckets [column]
@@ -115,7 +118,13 @@
 
 ;; process
 
+;; (defn process-gradelist0 [column]
+;;   (do
+;;     (.log js/console (report-buckets column))
+;;     (-> column sorted-gradelist report-median)))
+
 (defn process-gradelist [column]
-  (do
-    (.log js/console (report-buckets column))
-    (-> column sorted-gradelist report-median)))
+  (let [sgl (sorted-gradelist column)]
+    (str (report-median sgl)
+         "/n"
+         (print-validation sgl))))
