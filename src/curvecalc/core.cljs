@@ -1,27 +1,15 @@
 (ns curvecalc.core
   (:require [reagent.core :refer [render]]
             [curvecalc.state :refer [numstuds distribution]]
-            [cljs.pprint :refer [cl-format]]
             [curvecalc.upload.core :refer [file-upload-component]]
-            [curvecalc.calc :refer [order-of-keys simple-distributions complex-distributions distroset permissible-distributions]]))
+            [curvecalc.calc :refer [order-of-keys simple-distributions complex-distributions distroset permissible-distributions]]
+            [curvecalc.stringstuff :refer [range-stringer dig1 dig2]]))
 
 
 (defn input-field [val-atom]
   [:input {:type "text"
            :value @val-atom
            :on-change #(reset! val-atom (-> % .-target .-value))}])
-
-(defn dig2 [somenum]
-  (cl-format nil "~,2f" somenum))
-
-(defn dig1 [somenum]
-  (cl-format nil "~,1f" somenum))
-
-(defn range-stringer [grade]
-  (let [r (:range grade)
-        l (dig1 (:low r))
-        h (dig1 (:high r))]
-    (str l " - " h)))
 
 (defn row-component [grange distros distro-key]
   (let [this-grade (grange distros)]

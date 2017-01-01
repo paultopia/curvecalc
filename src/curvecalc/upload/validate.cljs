@@ -1,5 +1,6 @@
 (ns curvecalc.upload.validate
-  (:require [curvecalc.calc :as c]))
+  (:require [curvecalc.calc :as c]
+            [curvecalc.stringstuff :refer [range-stringer]]))
 
 
 
@@ -63,29 +64,51 @@
   (let [subdistro (grade-key distro)
         numingrade (grade-key buckets)
         minimum (:min subdistro)
-        maximum (:max subdistro)]
+        maximum (:max subdistro)
+        label (str (name grade-key) ": " (range-stringer subdistro))]
     (cond
       (>= maximum numingrade minimum)
-      {grade-key {:evaluation :valid :info nil}}
+      {grade-key {:evaluation :valid :fault nil :label label
+                  :maximum maximum :minimum minimum :numingrade numingrade}}
       (> numingrade maximum)
-      {grade-key {:evaluation :invalid :info {:fault :high :max maximum :numingrade numingrade}}}
+      {grade-key {:evaluation :invalid :fault :high :label label
+                  :maximum maximum :minimum minimum :numingrade numingrade}}
       :else
-      {grade-key {:evaluation :invalid :info {:fault :low :min minimum :numingrade numingrade}}})))
+      {grade-key {:evaluation :invalid :fault :low :label label
+                  :minimum minimum :maximum maximum :numingrade numingrade}})))
 
 ;; names are inconsistent here --- numgrades in this ns, num-students elsewhere. fix this.
-(defn validate-grades [column]
-  (let [numgrades (count column) ; MUST BE done AFTER stripping non-grade entries, like header
-        distro-key (choose-distro numgrades)
-        distro (c/permissible-distributions numgrades distro-key)
-        keyorder (c/order-of-keys distro-key)
+(defn validate-grades [column numgrades distro-key keyorder]
+  (let [distro (c/permissible-distributions numgrades distro-key)
         buckets (combine-buckets numgrades (bucketizer column))
         validator (partial validate-one-grade distro buckets)]
     (apply merge (map #(validator %) keyorder))))
 
-;; micro-test.  need a test suite here.
-(.log js/console (str (validate-grades [3.1 3.4 3.3 3.0 4.3 2.9 4.1 2.3 2.1 3.0 1.0 4.0 3.8])))
 
-;; all I need to do now is report (and make tests...prob using devcards.)
+;; all I need to do now is integrate report in ui (and make tests...prob using devcards.)
+;; oh, also and sort out rounding of non-ints with an option for people to choose.
+
+
+(defn report-builder [validation grade-key]
+  (let [subscore (grade-key validation)
+        {:keys [label evaluation fault maximum minimum numingrade]} subscore]
+    (cond
+      (= evaluation :valid)
+      (str label ": Valid! Max: " maximum " Min: " minimum " Number: " numingrade)
+      :else (str label ": INVALID! :-( Max: " maximum " Min: " minimum " Number: " numingrade)
+      )))
+
+(defn report-validation [sgl]
+  (let [numgrades (count sgl)
+        distro-key (choose-distro numgrades)
+        keyorder (c/order-of-keys distro-key)
+        validation (validate-grades sgl numgrades distro-key keyorder)
+        reporter (partial report-builder validation)]
+    (mapv reporter keyorder)))
+
+;; micro-test.  need a test suite here.
+(.log js/console (str (report-validation [3.1 3.4 3.3 3.0 4.3 2.9 4.1 2.3 2.1 3.0 1.0 4.0 3.8])))
+
 
 (defn report-buckets [column]
   (str (combine-buckets 30 (bucketizer column))))
