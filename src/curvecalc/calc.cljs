@@ -65,3 +65,13 @@
               :norm "N/A"
               :max (* .35 num-students)
               :range "2.9 and below"}})
+
+(defn distroset [distro-key]
+  (if (= distro-key :complex)
+    :simple
+    :complex))
+
+(defn permissible-distributions [num-students distro-key]
+  (if (= distro-key :complex)
+    (complex-distributions num-students)
+    (simple-distributions num-students)))

@@ -1,23 +1,10 @@
 (ns curvecalc.core
-  (:require [reagent.core :refer [atom render]]
+  (:require [reagent.core :refer [render]]
+            [curvecalc.state :refer [numstuds distribution]]
             [cljs.pprint :refer [cl-format]]
             [curvecalc.upload.core :refer [file-upload-component]]
-            [curvecalc.calc :refer [simple-distributions complex-distributions]]))
+            [curvecalc.calc :refer [simple-distributions complex-distributions distroset permissible-distributions]]))
 
-(defonce numstuds (atom 0))
-(defonce distribution (atom :complex))
-
-(defn distroset [distro-key]
-  (if (= distro-key :complex)
-    :simple
-    :complex))
-
-(defn permissible-distributions [num-students distro-key]
-  (if (= distro-key :complex)
-    (complex-distributions num-students)
-    (simple-distributions num-students)))
-
-;; all this distro-key manipulation is ugly and I hate it. need to refactor.
 
 (defn input-field [val-atom]
   [:input {:type "text"
