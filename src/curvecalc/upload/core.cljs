@@ -1,12 +1,11 @@
 (ns curvecalc.upload.core
-  "experimental functionality to read user-supplied CSV file and test it against grade curve.  Right now, just has functionality to grab csv, take the second column, and display it in the UI.  In another namespace, I will create the functionality to take that second column (which is assumed to have the grades), and:
+  "experimental functionality to read user-supplied CSV file and test it against grade curve. Needs refactor into better namespaces. also needs tests, better display.
 
-  1.  detect header row or not (because of empty rows, I should probably just filter for parsing string as number )
-  2.  identify median (one or two numbers, depending on even or odd count)
-  3.  test it against mandatory grade curve.
-File upload functionality derived (basically wholesale) from https://mrmcc3.github.io/post/csv-with-clojurescript/
-
-  The only thing this namespace should expose to the rest of the app is file-upload-component, which will be a full renderable reagent page that will handle upload and download.  (This page will also need to go back to previous page using dirty circular namespace dependency tricks.) (Alternatively, I may offer it as a component that renders below the table...)"
+  future functionality:
+  1.  let users choose how to round fractional grades (right now no rounding is equivalent to rounding down)
+  2.  more attractive display.
+  3.  give users option re permissible medians in two-value cases.
+  4.  one day: suggest grades."
   (:require [curvecalc.state :refer [file-data]]
             [cljs.core.async :refer [put! chan <! >!]]
             [goog.labs.format.csv :refer [parse]]
@@ -52,11 +51,28 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
 
 ;;; SECOND COLUMN OF CSV MUST BE GRADES.  (And will need to parse them to floats in processing.)
 
+(defn explanation-component []
+  [:div
+   [:p "Experimental functionality to validate existing grade lists.  Right now, you can select a csv file (Excel will export a worksheet as csv) with the grades in the " [:b "second column"] " (mandatory) and the program will compare the grade distribution to the rules and tell you if it matches, or, if it doesn't match, what went wrong."]
+   [:p "Supply your file below. Note that this file doesn't actually send it to any server---it just analyzes the file within your browser, so student privacy is preserved."]])
+
+(defn disclaimer-component []
+  [:div
+   [:h5 "Notes and disclaimers"]
+   [:p "This functionality is "[:b "experimental"] ": I have tested it against a couple known-correct distributions, but have not done so exhaustively. For now, you should make your own count."]
+   [:p "For the median in the case of even-numbered grade counts, this currently gives the two central numbers rather than averaging them. Also, when there are at least 30 students, in addition to accepting 3.3-3.3 and 3.2-3.4, the validator accepts 3.2-3.3 and 3.3-3.4 (medians 3.25 and 3.35, respectively)."]
+   [:p "Currently, fractional numbers of students within a grade bucket are not rounded, which for validation is the functional equivalent of rounding down."]
+   [:h5 "Future Enhancements:"]
+   [:ul
+    [:li "More testing and confidence about the correctness of the validation"]
+    [:li "An option to choose how to handle medians in even-numbered grade lists"]
+    [:li "An option to round fractional numbers of students up, down, or to nearest whole number."]
+    [:li "Suggested curved grades from a csv of raw grades (eventually, maybe, if I can figure out a good heuristic)."]]])
+
 ;; ONLY PUBLIC NAME
 (defn file-upload-component []
   [:div
-   [:p "Experimental functionality to upload and validate files.  Right now, you can select a csv file (Excel will export a worksheet as csv) with the grades in the " [:b "second column"] " (mandatory) and the program will tell you what the median grade is. Down the road (time and laziness permitting), it may also validate your grades against the curve and maybe even suggest corrections. Maybe."]
-   [:p "Supply your file below. Note that this file doesn't actually send it to any server---it just analyzes the file within your browser, so student privacy is preserved."]
+   [explanation-component]
    [input-component]
    [d/validation-component @file-data]
    [d/buckets-component @file-data]])
@@ -64,5 +80,6 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
 (defn validation-page []
   [:div.container [:h3 "Iowa Law Grade Curve Validator (Experimental)"]
    [file-upload-component]
+   [disclaimer-component]
    [footer-component calculate "calculate a curve"]
   ])
