@@ -7,13 +7,11 @@
 File upload functionality derived (basically wholesale) from https://mrmcc3.github.io/post/csv-with-clojurescript/
 
   The only thing this namespace should expose to the rest of the app is file-upload-component, which will be a full renderable reagent page that will handle upload and download.  (This page will also need to go back to previous page using dirty circular namespace dependency tricks.) (Alternatively, I may offer it as a component that renders below the table...)"
-  (:require [reagent.core :refer [render atom]]
+  (:require [curvecalc.state :refer [file-data]]
             [cljs.core.async :refer [put! chan <! >!]]
             [goog.labs.format.csv :refer [parse]]
             [curvecalc.upload.display :as d])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
-
-(def file-data (atom " "))
 
 (def first-file
   (map (fn [e]
