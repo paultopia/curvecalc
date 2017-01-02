@@ -20,7 +20,6 @@
   (map (fn [e]
          (let [target (.-currentTarget e)
                file (-> target .-files (aget 0))]
-        ;;   (set! (.-value target) "")
            file))))
 
 (defn transpose [m]
@@ -47,9 +46,9 @@
   (recur))
 
 (defn input-component []
-  [:input {:type "file" :id "file" :title "upload" :accept ".csv" :name "file" :on-change put-upload}])
+    [:input
+     {:type "file" :id "file" :title "upload" :accept ".csv" :name "file" :on-change put-upload}])
 
-;;; SECOND COLUMN OF CSV MUST BE GRADES.  (And will need to parse them to floats in processing.)
 
 (defn explanation-component []
   [:div
@@ -69,7 +68,6 @@
     [:li "An option to round fractional numbers of students up, down, or to nearest whole number."]
     [:li "Suggested curved grades from a csv of raw grades (eventually, maybe, if I can figure out a good heuristic)."]]])
 
-;; ONLY PUBLIC NAME
 (defn file-upload-component []
   [:div
    [explanation-component]
