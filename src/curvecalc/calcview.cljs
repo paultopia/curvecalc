@@ -1,9 +1,12 @@
 (ns curvecalc.calcview
   "just holds the view for the calculation display (not validation)"
   (:require [curvecalc.state :refer [numstuds distribution rounding]]
-            [curvecalc.upload.core :refer [file-upload-component]]
+            [reagent.core :refer [render]]
+            [curvecalc.footer :refer [footer-component]]
             [curvecalc.calc :refer [order-of-keys simple-distributions complex-distributions distroset permissible-distributions]]
             [curvecalc.stringstuff :refer [range-stringer dig1 dig2]]))
+
+(def validate #(curvecalc.core.load-validation))
 
 (defn input-field [val-atom]
   [:input {:type "text"
@@ -47,6 +50,4 @@
    [:div [table-component @numstuds @distribution]]
    [explainer-component @distribution]
    [:p [:button {:on-click #(swap! distribution distroset @distribution)} "Swap distributions."] ]
-   [:hr]
-   [:p "In case you're really curious, you can see "
-    [:a {:href "https://github.com/paultopia/curvecalc"} "the source code for this stuff."] " Source for requirements: " [:a {:href "https://law.uiowa.edu/sites/law.uiowa.edu/files/wysiwyg_uploads/student_handbook-16-17.pdf"} "2016-7 Student handbook."]]])
+   [footer-component validate "validate your grades"]])

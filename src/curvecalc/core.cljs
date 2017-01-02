@@ -3,6 +3,9 @@
             [curvecalc.calcview :refer [calculation-page]]
             [curvecalc.upload.core :refer [validation-page]]))
 
+;; this is a hack to do nav without circular dependencies or messing around with a routing library
+(defn load-calculation [] (render [calculation-page] (.getElementById js/document "app")))
+(defn load-validation [] (render [validation-page] (.getElementById js/document "app")))
 
 
 (defn home-page []
@@ -17,13 +20,13 @@
     [:div.four.columns
      [:p
       [:button.button-primary
-       {:on-click #(render [calculation-page] (.getElementById js/document "app"))}
+       {:on-click load-calculation}
        "calculate curve"
        ]]]
     [:div.four.columns
      [:p
       [:button.button-primary
-       {:on-click #(render [validation-page] (.getElementById js/document "app"))}
+       {:on-click load-validation}
        "validate grades"
        ]]]
     [:div.three.columns " "]

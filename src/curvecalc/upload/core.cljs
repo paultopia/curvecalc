@@ -10,8 +10,12 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
   (:require [curvecalc.state :refer [file-data]]
             [cljs.core.async :refer [put! chan <! >!]]
             [goog.labs.format.csv :refer [parse]]
-            [curvecalc.upload.display :as d])
+            [curvecalc.upload.display :as d]
+            [curvecalc.footer :refer [footer-component]])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
+
+(def calculate #(curvecalc.core.load-calculation))
+
 
 (def first-file
   (map (fn [e]
@@ -60,6 +64,5 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
 (defn validation-page []
   [:div.container [:h3 "Iowa Law Grade Curve Validator (Experimental)"]
    [file-upload-component]
-   [:hr]
-   [:p "In case you're really curious, you can see "
-    [:a {:href "https://github.com/paultopia/curvecalc"} "the source code for this stuff."] " Source for requirements: " [:a {:href "https://law.uiowa.edu/sites/law.uiowa.edu/files/wysiwyg_uploads/student_handbook-16-17.pdf"} "2016-7 Student handbook."]]])
+   [footer-component calculate "calculate a curve"]
+  ])
