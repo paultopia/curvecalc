@@ -44,7 +44,6 @@
         c (count median)
         distro-key (choose-distro (count sgl))
         isvalid (median-valid? median c distro-key)]
-    (.log js/console (str "Median valid? " isvalid))
     {:valid isvalid
      :details
      (cond
@@ -129,24 +128,4 @@
         validation (validate-grades sgl numgrades distro-key keyorder)
         reporter (partial report-builder validation)
         isvalid (buckets-valid? keyorder validation)]
-    (.log js/console (str "Buckets valid? " isvalid))
     {:valid isvalid :details (mapv reporter keyorder)}))
-
-(defn print-validation [sgl]
-  (apply str (interpose " | | | |" (:details (report-validation sgl)))))
-
-(defn print-validation2 [sgl]
-  (let [report :foo] :bar))
-
-;; micro-test.  need a test suite here.
-(.log js/console (print-validation [3.1 3.4 3.3 3.0 4.3 2.9 4.1 2.3 2.1 3.0 1.0 4.0 3.8]))
-
-
-(defn report-buckets [column]
-  (str (combine-buckets 30 (bucketizer column))))
-
-(defn process-gradelist [column]
-  (let [sgl (sorted-gradelist column)]
-    (str (report-median sgl)
-         "/n"
-         (print-validation sgl))))

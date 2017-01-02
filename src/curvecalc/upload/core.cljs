@@ -10,7 +10,6 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
   (:require [reagent.core :refer [render atom]]
             [cljs.core.async :refer [put! chan <! >!]]
             [goog.labs.format.csv :refer [parse]]
-            [curvecalc.upload.validate :refer [process-gradelist]]
             [curvecalc.upload.display :as d])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
@@ -57,6 +56,5 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
    [:p "Experimental functionality to upload and validate files.  Right now, you can select a csv file (Excel will export a worksheet as csv) with the grades in the " [:b "second column"] " (mandatory) and the program will tell you what the median grade is. Down the road (time and laziness permitting), it may also validate your grades against the curve and maybe even suggest corrections. Maybe."]
    [:p "Supply your file below. Note that this file doesn't actually send it to any server---it just analyzes the file within your browser, so student privacy is preserved."]
    [input-component]
-   [:p (process-gradelist @file-data)]
    [d/validation-component @file-data]
    [d/buckets-component @file-data]])
