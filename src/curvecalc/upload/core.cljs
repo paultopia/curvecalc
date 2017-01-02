@@ -56,3 +56,10 @@ File upload functionality derived (basically wholesale) from https://mrmcc3.gith
    [input-component]
    [d/validation-component @file-data]
    [d/buckets-component @file-data]])
+
+(defn validation-page []
+  [:div.container [:h3 "Iowa Law Grade Curve Validator (Experimental)"]
+   [file-upload-component]
+   [:hr]
+   [:p "In case you're really curious, you can see "
+    [:a {:href "https://github.com/paultopia/curvecalc"} "the source code for this stuff."] " Source for requirements: " [:a {:href "https://law.uiowa.edu/sites/law.uiowa.edu/files/wysiwyg_uploads/student_handbook-16-17.pdf"} "2016-7 Student handbook."]]])

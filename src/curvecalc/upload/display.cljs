@@ -1,5 +1,5 @@
 (ns curvecalc.upload.display
-  "reagent component to request validation input and display results."
+  "components for validation side."
   (:require [curvecalc.upload.validate :as v]
             [curvecalc.stringstuff :as s]))
 
@@ -22,4 +22,3 @@
   (let [sgl (v/sorted-gradelist raw-column)]
     [:div
      [median-component sgl]]))
-
