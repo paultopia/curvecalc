@@ -9,3 +9,14 @@ The plan:
 3.  When tree is complete, take permissible nodes and calculate loss function for each.  Loss function (tentatively) is just sum of absolute values of distances from ideal distribution. Pick distribution with lowest loss function.
 
 4.  Then I need to develop sub-distribution ranges. Probably the easiest thing to do there would just be to divide the range by 3, then set the cut-points at thirds.  Can tweak around the edges there without losing anything. 
+
+
+ABOLISHING THAT PLAN.  HERE COMES A NEW PLAN: 
+
+1.  Get uniques from dataset.
+
+2.  Combinatorically generate all partitions from the set of uniques with any legal number.  Where legal number = number of partitions with 0 A+s and 0 C-s, with just one of those, and with two of those. The partitions function from clojure.math.combinatorics will probably do that.
+
+3.  Test each partition.  If it passes, shove it into a vector.  This is just a freaking filter.  For the just-one-of-those partitions, will have to test with just A+ and just C-, but that's ok.
+
+4.  Then carry out steps 3 and 4 from above.  
