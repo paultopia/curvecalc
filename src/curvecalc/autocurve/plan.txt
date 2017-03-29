@@ -20,3 +20,13 @@ ABOLISHING THAT PLAN.  HERE COMES A NEW PLAN:
 3.  Test each partition.  If it passes, shove it into a vector.  This is just a freaking filter.  For the just-one-of-those partitions, will have to test with just A+ and just C-, but that's ok.
 
 4.  Then carry out steps 3 and 4 from above.  
+
+SOME DETAIL: 
+
+
+Generate all cuts: combinatorics partition of uniques vector (limited to permissible sizes) plus filter by flattened x == uniques vector 
+
+Then multiply out and sum each bucket by frequencies from original grade dataset to get total in each bucket to test vs permissible distro 
+
+See different and probably better ways to generate all cuts here:
+https://groups.google.com/forum/m/#!searchin/clojure/Combinatorics$20/clojure/DoEMT45VpAo
