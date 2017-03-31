@@ -1,7 +1,8 @@
 (ns curvecalc.core
   (:require [reagent.core :refer [render]]
             [curvecalc.calcview :refer [calculation-page]]
-            [curvecalc.upload.core :refer [validation-page]]))
+            [curvecalc.upload.core :refer [validation-page]]
+            [curvecalc.autocurve.manipulations]))
 
 ;; this is a hack to do nav without circular dependencies or messing around with a routing library
 (defn load-calculation [] (render [calculation-page] (.getElementById js/document "app")))

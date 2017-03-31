@@ -6,6 +6,7 @@
 
   :dependencies [[org.clojure/clojure "1.8.0" :scope "provided"]
                  [org.clojure/clojurescript "1.9.229" :scope "provided"]
+                 [org.clojure/math.combinatorics "0.1.4"]
                  [reagent "0.6.0"]
                  [frankiesardo/linked "1.2.9"]
                  [org.clojure/core.async "0.2.395"]]
