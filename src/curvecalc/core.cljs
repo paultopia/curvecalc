@@ -38,7 +38,7 @@
 
 (defn mount-root []
   (when-let [app (.getElementById js/document "app")]
-    (r/render [home-page] app)))
+    (render [home-page] app)))
 
 (defn init! []
   (mount-root))
