@@ -8,13 +8,14 @@
                  [org.clojure/clojurescript "1.9.229" :scope "provided"]
                  [org.clojure/math.combinatorics "0.1.4"]
                  [reagent "0.6.0"]
+                 [devcards "0.2.2"]
                  [frankiesardo/linked "1.2.9"]
                  [org.clojure/core.async "0.2.395"]]
 
-  :plugins [[lein-cljsbuild "1.1.3"]
-            [lein-figwheel "0.5.4-5"]]
+  :plugins [[lein-cljsbuild "1.1.4"]
+            [lein-figwheel "0.5.8"]]
 
-  :min-lein-version "2.5.0"
+  :min-lein-version "2.7.1"
 
   :clean-targets ^{:protect false}
   [:target-path
@@ -38,6 +39,17 @@
                          :source-map true
                          :optimizations :none
                          :pretty-print  true}}
+                       :devcards
+                       {:source-paths ["src" "env/dev/cljs" "test"]
+                        :figwheel
+                        {:devcards true}
+                        :compiler
+                        {:main       "curvecalc.dev"
+                         :asset-path "js/devcards_out"
+                         :output-to  "public/js/devcards.js"
+                         :output-dir "public/js/devcards_out"
+                         :optimizations :none
+                         :source-map-timestamp true}}
                        :release
                        {:source-paths ["src" "env/prod/cljs"]
                         :compiler
