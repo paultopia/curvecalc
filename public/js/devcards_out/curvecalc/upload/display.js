@@ -30,4 +30,4 @@ var sgl = curvecalc.upload.validate.sorted_gradelist.call(null,raw_column);
 return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div","div",1057191632),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [curvecalc.upload.display.median_component,sgl], null)], null);
 });
 
-//# sourceMappingURL=display.js.map?rel=1490992388031
+//# sourceMappingURL=display.js.map?rel=1491429252821

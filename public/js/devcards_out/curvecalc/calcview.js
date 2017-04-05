@@ -85,4 +85,4 @@ return cljs.core.swap_BANG_.call(null,curvecalc.state.distribution,curvecalc.cal
 })], null),"Swap distributions."], null)], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [curvecalc.footer.footer_component,curvecalc.calcview.validate,"validate your grades"], null)], null);
 });
 
-//# sourceMappingURL=calcview.js.map?rel=1490992390009
+//# sourceMappingURL=calcview.js.map?rel=1491429255725

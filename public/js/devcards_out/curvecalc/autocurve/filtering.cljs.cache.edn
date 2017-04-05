@@ -1,0 +1,1 @@
+{:rename-macros {}, :renames {}, :use-macros {}, :excludes #{}, :name curvecalc.autocurve.filtering, :imports nil, :requires {m curvecalc.autocurve.manipulations, curvecalc.autocurve.manipulations curvecalc.autocurve.manipulations}, :uses nil, :require-macros nil, :doc nil}

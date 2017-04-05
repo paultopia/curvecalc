@@ -18,7 +18,7 @@ curvecalc.core.mount_root = (function curvecalc$core$mount_root(){
 var temp__4657__auto__ = document.getElementById("app");
 if(cljs.core.truth_(temp__4657__auto__)){
 var app = temp__4657__auto__;
-return r.render.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [curvecalc.core.home_page], null),app);
+return reagent.core.render.call(null,new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [curvecalc.core.home_page], null),app);
 } else {
 return null;
 }
@@ -27,4 +27,4 @@ curvecalc.core.init_BANG_ = (function curvecalc$core$init_BANG_(){
 return curvecalc.core.mount_root.call(null);
 });
 
-//# sourceMappingURL=core.js.map?rel=1490992390031
+//# sourceMappingURL=core.js.map?rel=1491430805209

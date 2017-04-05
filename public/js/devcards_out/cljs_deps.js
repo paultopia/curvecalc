@@ -46,7 +46,8 @@ goog.addDependency("../cljs/test.js", ['cljs.test'], ['cljs.core', 'cljs.pprint'
 goog.addDependency("../showdown.inc.js", ['cljsjs.showdown'], []);
 goog.addDependency("../devcards/util/markdown.js", ['devcards.util.markdown'], ['cljs.core', 'cljsjs.showdown', 'clojure.string']);
 goog.addDependency("../devcards/core.js", ['devcards.core'], ['devcards.util.utils', 'devcards.system', 'cljs.core', 'cljs.test', 'cljs.core.async', 'sablono.core', 'devcards.util.edn_renderer', 'devcards.util.markdown', 'clojure.string']);
-goog.addDependency("../curvecalc/autocurve/manipulations_test.js", ['curvecalc.autocurve.manipulations_test'], ['devcards.core', 'reagent.core', 'cljs.core', 'cljs.test', 'curvecalc.autocurve.manipulations']);
+goog.addDependency("../curvecalc/autocurve/filtering.js", ['curvecalc.autocurve.filtering'], ['cljs.core', 'curvecalc.autocurve.manipulations']);
+goog.addDependency("../curvecalc/autocurve/manipulations_test.js", ['curvecalc.autocurve.manipulations_test'], ['devcards.core', 'reagent.core', 'cljs.core', 'cljs.test', 'curvecalc.autocurve.manipulations', 'curvecalc.autocurve.filtering']);
 goog.addDependency("../curvecalc/core_test.js", ['curvecalc.core_test'], ['cljs.core', 'curvecalc.autocurve.manipulations_test']);
 goog.addDependency("../figwheel/client/utils.js", ['figwheel.client.utils'], ['goog.userAgent.product', 'cljs.core', 'clojure.string']);
 goog.addDependency("../figwheel/client/file_reloading.js", ['figwheel.client.file_reloading'], ['goog.string', 'goog.net.jsloader', 'goog.Uri', 'cljs.core', 'goog.object', 'cljs.core.async', 'clojure.set', 'figwheel.client.utils', 'clojure.string']);

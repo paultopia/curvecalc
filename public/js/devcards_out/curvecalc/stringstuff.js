@@ -15,4 +15,4 @@ var h = curvecalc.stringstuff.dig1.call(null,new cljs.core.Keyword(null,"high","
 return [cljs.core.str(l),cljs.core.str(" - "),cljs.core.str(h)].join('');
 });
 
-//# sourceMappingURL=stringstuff.js.map?rel=1490992387896
+//# sourceMappingURL=stringstuff.js.map?rel=1491429252427

@@ -42,10 +42,10 @@ return React.createElement("span",({"key": index}),sablono.interpreter.interpret
 devcards.util.edn_renderer.join_html = (function devcards$util$edn_renderer$join_html(separator,coll){
 return devcards.util.edn_renderer.interpose_separator.call(null,cljs.core.into.call(null,cljs.core.PersistentVector.EMPTY,cljs.core.map_indexed.call(null,devcards.util.edn_renderer.html_val,coll)),separator,devcards.util.edn_renderer.separate_fn.call(null,coll));
 });
-devcards.util.edn_renderer.html_keyval = (function devcards$util$edn_renderer$html_keyval(p__32482){
-var vec__32486 = p__32482;
-var k = cljs.core.nth.call(null,vec__32486,(0),null);
-var v = cljs.core.nth.call(null,vec__32486,(1),null);
+devcards.util.edn_renderer.html_keyval = (function devcards$util$edn_renderer$html_keyval(p__32484){
+var vec__32488 = p__32484;
+var k = cljs.core.nth.call(null,vec__32488,(0),null);
+var v = cljs.core.nth.call(null,vec__32488,(1),null);
 return React.createElement("span",({"key": cljs.core.prn_str.call(null,k), "className": "keyval"}),sablono.interpreter.interpret.call(null,devcards.util.edn_renderer.html.call(null,k)),sablono.interpreter.interpret.call(null,devcards.util.edn_renderer.html.call(null,v)));
 });
 devcards.util.edn_renderer.html_keyvals = (function devcards$util$edn_renderer$html_keyvals(coll){
@@ -100,11 +100,11 @@ return devcards.util.edn_renderer.literal.call(null,"literal",x);
 }
 });
 devcards.util.edn_renderer.html_edn = (function devcards$util$edn_renderer$html_edn(e){
-var _STAR_key_counter_STAR_32490 = devcards.util.edn_renderer._STAR_key_counter_STAR_;
+var _STAR_key_counter_STAR_32492 = devcards.util.edn_renderer._STAR_key_counter_STAR_;
 devcards.util.edn_renderer._STAR_key_counter_STAR_ = cljs.core.atom.call(null,(0));
 
 try{return React.createElement("div",({"key": "devcards-edn-block", "className": "com-rigsomelight-rendered-edn com-rigsomelight-devcards-typog"}),sablono.interpreter.interpret.call(null,devcards.util.edn_renderer.html.call(null,e)));
-}finally {devcards.util.edn_renderer._STAR_key_counter_STAR_ = _STAR_key_counter_STAR_32490;
+}finally {devcards.util.edn_renderer._STAR_key_counter_STAR_ = _STAR_key_counter_STAR_32492;
 }});
 
-//# sourceMappingURL=edn_renderer.js.map?rel=1490992383239
+//# sourceMappingURL=edn_renderer.js.map?rel=1491429245888

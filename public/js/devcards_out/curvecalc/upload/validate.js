@@ -176,4 +176,4 @@ var isvalid = curvecalc.upload.validate.buckets_valid_QMARK_.call(null,keyorder,
 return new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"valid","valid",155614240),isvalid,new cljs.core.Keyword(null,"details","details",1956795411),cljs.core.mapv.call(null,reporter,keyorder)], null);
 });
 
-//# sourceMappingURL=validate.js.map?rel=1490992388011
+//# sourceMappingURL=validate.js.map?rel=1491429252757
